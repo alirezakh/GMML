@@ -9538,7 +9538,7 @@ void Assembly::UpdateResidueName2GlycamName(GlycamResidueNamingMap residue_glyca
             GlycamAtomNameMap pdb_glycam_map = GlycamAtomNameMap();
             GlycamAtomNameMap glycam_pdb_map = GlycamAtomNameMap();
             string glycam_name = *glycam_names.begin();
-            for(set<string>::iterator name_it = glycam_names.begin(); name_it != glycam_names.end(); name_it++)
+            /*for(set<string>::iterator name_it = glycam_names.begin(); name_it != glycam_names.end(); name_it++)
             {
                 string glycam_residue_name = *name_it;
                 PrepFile::ResidueMap customized_prep_residues = PrepFile::ResidueMap();
@@ -9565,9 +9565,10 @@ void Assembly::UpdateResidueName2GlycamName(GlycamResidueNamingMap residue_glyca
                     glycam_name = glycam_residue_name;
                     cout << "Match " << glycam_name << " " << residue->GetName() << endl;
                     break;
-                }
-            }
+                } 
+            }*/
 
+            string temp = glycam_name;
             AtomVector atoms = residue->GetAtoms();
             AtomVector updated_atoms = AtomVector();
             for(AtomVector::iterator it1 = atoms.begin(); it1 != atoms.end(); it1++)
@@ -9606,22 +9607,20 @@ void Assembly::UpdateResidueName2GlycamName(GlycamResidueNamingMap residue_glyca
                     //Update to match the atoms with the corresponding prep residue to change the atom names with respect to prep file
                     //Use the map to update the atom naming
                     //Add the atom name mismatch into a structure for the Ontology usage
-                    cout << atom_id << endl;
-                    string prep_atom_id = pdb_glycam_map[atom_id];
-                    cout << prep_atom_id << endl;
+//                    string prep_atom_id = pdb_glycam_map[atom_id];
+                    glycam_name = temp;
+                    string prep_atom_id = atom_id;
                     string atom_name = atom->GetName();
                     string new_atom_name = Split(prep_atom_id,"_")[0];
                     string new_atom_id = atom_id;
                     int index = new_atom_id.find(residue_name);
-                    glycam_name = Split(prep_atom_id,"_")[2];
+//                    glycam_name = Split(prep_atom_id,"_")[2];
                     if(index >= 0)
                         new_atom_id = new_atom_id.replace(index, residue_name_size, glycam_name);
                     index = new_atom_id.find(atom_name);
                     if(index >= 0)
                         new_atom_id = new_atom_id.replace(index, atom_name.size(), new_atom_name);
                     atom->SetId(new_atom_id);
-
-
                     updated_atoms.push_back(atom);
                 }
             }
@@ -9916,7 +9915,7 @@ vector<Oligosaccharide*> Assembly::ExtractSugars(vector<string> amino_lib_files)
         string cycle_atoms_str = (*it).first;
         AtomVector cycle = (*it).second;
 
-        DetectShape(cycle, mono);
+        ///DetectShape(cycle, mono);
 
         stringstream ring_atoms;
         ring_atoms << "Ring atoms: " << cycle_atoms_str;
