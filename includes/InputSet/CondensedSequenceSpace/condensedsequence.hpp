@@ -12,12 +12,47 @@ namespace CondensedSequenceSpace
 {
     class CondensedSequenceResidue;
     class CondensedSequenceAmberPrepResidue;
+    // Options for condensed sequence: rotamers and glycosidic angles
+    struct RotamersAndGlycosidicAnglesInfo{
+        public:
+            RotamersAndGlycosidicAnglesInfo(int linkage_index, std::vector<std::pair<std::string, std::vector<std::string> > > possible_rotamers,
+                                            std::vector<std::pair<std::string, std::vector<std::string> > > selected_rotamers,
+                                            std::vector<std::pair<std::string, double> > enabled_glycosidic_angles)
+            {
+                linkage_index_ = linkage_index;
+                possible_rotamers_ = possible_rotamers;
+                selected_rotamers_ = selected_rotamers;
+                enabled_glycosidic_angles_ = enabled_glycosidic_angles;
+            }
+
+            int GetLinkageIndex(){
+                return linkage_index_;
+            }
+
+            std::vector<std::pair<std::string, std::vector<std::string> > > GetPossibleRotamers(){
+                return possible_rotamers_;
+            }
+
+            std::vector<std::pair<std::string, std::vector<std::string> > > GetSelectedRotamers(){
+                return selected_rotamers_;
+            }
+
+            std::vector<std::pair<std::string, double> > GetEnabledGlycosidicAngles(){
+                return enabled_glycosidic_angles_;
+            }
+
+            int linkage_index_;
+            std::vector<std::pair<std::string, std::vector<std::string> > > possible_rotamers_;
+            std::vector<std::pair<std::string, std::vector<std::string> > > selected_rotamers_;
+            std::vector<std::pair<std::string, double> > enabled_glycosidic_angles_;
+    };
+
     class CondensedSequence
     {
         public:
             //////////////////////////////////////////////////////////
             //                    TYPE DEFINITION                   //
-            //////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////         
             /*! \typedef
               * List of condensed sequence residues
               */
@@ -30,7 +65,12 @@ namespace CondensedSequenceSpace
 //            typedef std::vector<std::pair<CondensedSequenceAmberPrepResidue*, int> > CondensedSequenceAmberPrepResidueTree;
 
             typedef std::vector<CondensedSequenceResidue*> CondensedSequenceResidueTree;
-            typedef std::vector<CondensedSequenceAmberPrepResidue*> CondensedSequenceAmberPrepResidueTree;
+            typedef std::vector<CondensedSequenceAmberPrepResidue*> CondensedSequenceAmberPrepResidueTree;       
+            typedef std::pair<std::string, RotamersAndGlycosidicAnglesInfo*> RotamerNameInfoPair;
+            typedef std::vector<RotamerNameInfoPair> CondensedSequenceRotamersAndGlycosidicAnglesInfo;
+            typedef std::map<int, std::vector<std::vector<double> > > IndexLinkageConfigurationMap;
+            typedef std::map<int, std::vector<std::vector<std::string> > > IndexConfigurationNameMap;
+            typedef std::map<int, std::string> IndexNameMap;
 
             //////////////////////////////////////////////////////////
             //                       CONSTRUCTOR                    //
@@ -71,6 +111,13 @@ namespace CondensedSequenceSpace
             std::string GetSecondLetterOfAmberPrepResidueCode(std::string residue_name, std::string isomer);
             std::string GetThirdLetterOfAmberPrepResidueCode(std::string configuration, std::string ring_type);
             CondensedSequenceAmberPrepResidue* GetCondensedSequenceDerivativeAmberPrepResidue(std::string derivative_name, int derivative_index);
+            CondensedSequenceRotamersAndGlycosidicAnglesInfo GetCondensedSequenceRotamersAndGlycosidicAnglesInfo(CondensedSequenceResidueTree residue_tree);
+            int CountAllPossibleSelectedRotamers(CondensedSequenceRotamersAndGlycosidicAnglesInfo rotamers_glycosidic_angles_info);
+            int CountAllPossible28LinkagesRotamers(CondensedSequenceRotamersAndGlycosidicAnglesInfo rotamers_glycosidic_angles_info);
+            std::vector<std::vector<int> > CreateBaseMapAllPossibleSelectedRotamers(CondensedSequenceRotamersAndGlycosidicAnglesInfo rotamers_glycosidic_angles_info);
+            IndexLinkageConfigurationMap CreateIndexLinkageConfigurationMap(CondensedSequenceRotamersAndGlycosidicAnglesInfo rotamers_glycosidic_angles_info,
+                                                                            IndexNameMap& names);
+
 
             //////////////////////////////////////////////////////////
             //                       DISPLAY FUNCTION               //

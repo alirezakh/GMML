@@ -24,6 +24,7 @@ namespace MolecularModeling
               * List of coordinates
               */
             typedef std::vector<GeometryTopology::Coordinate*> CoordinateVector;
+            typedef std::vector<Atom*> AtomVector;
 
             //////////////////////////////////////////////////////////
             //                       CONSTRUCTOR                    //
@@ -78,6 +79,23 @@ namespace MolecularModeling
               * @return id_ attribute of the current object of this class
               */
             std::string GetId();
+            /*! \fn
+              * An accessor function in order to access to the is_ring_ attribute of the current object
+              * @return is_ring_ attribute of the current object of this class
+              */
+            bool GetIsRing();
+            /*! \fn
+              * An accessor function in order to access to the index
+              * @return index_ attribute of the current object of this class
+              */
+            unsigned long long GetIndex();
+
+            //////////////////////////////////////////////////////////
+            //                       FUNCTIONS                      //
+            //////////////////////////////////////////////////////////
+            void FindConnectedAtoms(AtomVector &visitedAtoms);
+            double GetDistanceToAtom(Atom *otherAtom);
+            unsigned long long generateAtomIndex();
 
             //////////////////////////////////////////////////////////
             //                       MUTATOR                        //
@@ -136,6 +154,12 @@ namespace MolecularModeling
               * @param id The identification of the current object
               */
             void SetId(std::string id);
+            /*! \fn
+              * A mutator function in order to set the is_ring_ attribute of the current object
+              * Set the is_ring_ attribute of the current atom
+              * @param is_ring The boolean value representing if the current atom object is in aring or not
+              */
+            void SetIsRing(bool is_ring);
 
             //////////////////////////////////////////////////////////
             //                       DISPLAY FUNCTION               //
@@ -160,7 +184,8 @@ namespace MolecularModeling
             AtomNode* node_;                        /*!< A Pointer to a node of the graph structure that indicates this atom >*/
             std::string id_;                        /*!< An identifier for an atom which is generated based on the type of the input file from which the structure has to be built
                                                       Mostly it is like "residue_name:atom_name" >*/
-
+            bool is_ring_;                          /*!< A boolean value which represents if an atom is involved in a sugar ring or not. This attribute is set during the Sugar ID process >*/
+            unsigned long long index_;              /*!< A unqiue index for each atom in an assembly >*/
     };
 }
 

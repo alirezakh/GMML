@@ -101,6 +101,12 @@ namespace MolecularModeling
               */
             void AddAtom(Atom* atom);
             /*! \fn
+              * A function in order to remove the atom from the current object
+              * Set the atoms_ attribute of the current residue
+              * @param atom The atom of the current object
+              */
+            void RemoveAtom(Atom* atom);
+            /*! \fn
               * A mutator function in order to set the head atoms of the current object
               * Set the head_atoms_ attribute of the current residue
               * @param head_atoms The head atoms attribute of the current object
@@ -142,6 +148,19 @@ namespace MolecularModeling
               * @param id The identification attribute of the current object
               */
             void SetId(std::string id);
+
+            //////////////////////////////////////////////////////////
+            //                       FUNCTIONS                      //
+            //////////////////////////////////////////////////////////
+            /// Check if all atoms in the residue have their element symbols --> Label directly (1st priority)
+            bool CheckSymbolBasedElementLabeling();
+            /// Check if all atoms in the residue have their atom type --> Element symbols come from parameter file (2nd priority)
+            bool CheckParameterBasedElementLabeling();
+            bool GraphElementLabeling();
+            bool GraphSymbolBasedElementLabeling();
+            bool GraphParameterBasedElementLabeling();
+            bool GraphPredictionBasedElementLabeling();
+            AtomVector GetAtomsWithLowestIntraDegree();
 
             //////////////////////////////////////////////////////////
             //                       DISPLAY FUNCTION               //
